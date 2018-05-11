@@ -127,12 +127,12 @@ bool LinkedList<ItemType>::insert(int newPosition, const ItemType& newEntry)
 		{
 			// Create pointers to next and previous entries
 			Node<ItemType>* prevPtr = getNodeAt(newPosition - 1);
-			Node<ItemType>* nextPtr = getNodeAt(newPosition + 1);
+			Node<ItemType>* currPtr = getNodeAt(newPosition);
 
-			// Next entry's 'prev' pointer now points to new node
-			nextPtr->setPrev(newNodePtr);
+			// Current newPosition entry's prev ptr now points to new node
+			currPtr->setPrev(newNodePtr);
 			// New Node points backwards and forwards to old entries
-			newNodePtr->setNext(nextPtr);
+			newNodePtr->setNext(currPtr);
 			newNodePtr->setPrev(prevPtr);
 			// Previous entry's 'next' pointer now points to new node
 			prevPtr->setNext(newNodePtr);
@@ -142,6 +142,38 @@ bool LinkedList<ItemType>::insert(int newPosition, const ItemType& newEntry)
 
 	return ableToInsert;
 }  // end insert
+
+template<class ItemType>
+bool LinkedList<ItemType>::insert(const ItemType& newEntry)
+{
+	bool ableToInsert = true;
+	if (ableToInsert)
+	{
+		// Create a new node containing the new entry 
+		Node<ItemType>* newNodePtr = new Node<ItemType>(newEntry);
+
+		// Insert to first position. Set new node 'next' pointer to headPtr.
+		// Set headPtr 'prev' to point back to the new first node. headPtr 
+		// is set to point to the new first node.	  
+		if (isEmpty())
+		{
+			// headPtr points to new head				
+			headPtr = newNodePtr;
+			// tailPtr points to new tail				
+			tailPtr = newNodePtr;
+		}
+		else
+		{
+			// old head and new head point to each other				
+			newNodePtr->setNext(headPtr);
+			headPtr->setPrev(newNodePtr);
+			// headPtr points to new head				
+			headPtr = newNodePtr;
+		}
+	}
+	itemCount++;
+	return ableToInsert;
+}
 
 template<class ItemType>
 bool LinkedList<ItemType>::remove(int position)
@@ -218,6 +250,20 @@ ItemType LinkedList<ItemType>::getEntry(int position) const
 		throw(PrecondViolatedExcep(message));
 	}  // end if
 }  // end getEntry
+
+template<class ItemType>
+bool LinkedList<ItemType>::contains(const ItemType& newEntry)
+{
+	bool result = false;
+
+	for (int i = 1; i <= this->getLength(); i++)
+	{
+		if (getEntry(i) == newEntry)
+			return true;
+	}
+
+	return false;
+}
 
 template<class ItemType>
 void LinkedList<ItemType>::setEntry(int position, const ItemType& newEntry)

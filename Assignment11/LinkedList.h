@@ -40,12 +40,14 @@ public:
 	bool isEmpty() const;
 	int getLength() const;
 	bool insert(int newPosition, const ItemType& newEntry);
+	bool insert(const ItemType& newEntry); //inserts to front
 	bool remove(int position);
 	void clear();
 
 	/** @throw PrecondViolatedExcep if position < 1 or
 	position > getLength(). */
 	ItemType getEntry(int position) const;
+	bool contains(const ItemType& newEntry);
 
 	/** @throw PrecondViolatedExcep if position < 1 or
 	position > getLength(). */
